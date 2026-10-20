@@ -1,50 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:mysample/widgets/product_grid.dart';
 
+import 'pages/app_settings_screen.dart';
+import 'pages/cart_page.dart';
+import 'pages/edit_profile_screen.dart';
 import 'pages/feeds_sreen.dart';
+import 'pages/help_center_screen.dart';
 import 'pages/home_screen.dart';
 import 'pages/login_screen.dart';
 import 'pages/mall_sreen.dart';
 import 'pages/profile_screen.dart';
 import 'pages/register_screen.dart';
+import 'pages/shipping_addresses_screen.dart';
+import 'pages/splash_screen.dart';
 import 'pages/transactions_screen.dart';
-
-/// Flutter code sample for [NavigationBar].
 
 void main() => runApp(const NavigationBarApp());
 
 class NavigationBarApp extends StatelessWidget {
   const NavigationBarApp({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'BelanjaMart',
       debugShowCheckedModeBanner: false,
+      themeMode: ThemeMode.light, // Memaksa selalu light mode (cerah)
       theme: ThemeData(
-        // Explicitly enable Material 3 (Optional for modern Flutter versions)
         useMaterial3: true,
-        // Generate a full M3 ColorScheme from a single seed color
+        scaffoldBackgroundColor: const Color(0xFFF9FAFB),
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
+          seedColor: const Color(0xFFFF6B00),
+          primary: const Color(0xFFFF6B00),
+          secondary: const Color(0xFF6C5CE7),
           brightness: Brightness.light,
         ),
-      ),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
-          brightness: Brightness.dark,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          foregroundColor: Color(0xFF1E1B4B),
+          elevation: 0,
         ),
       ),
       // Halaman pertama yang dibuka
-      initialRoute: '/login',
+      initialRoute: '/splash',
 
       // Daftar route
       routes: {
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
         '/home': (context) => const NavigationExample(),
+        '/splash': (context) => const SplashScreen(),
+        '/cart': (context) => const CartPage(),
+        '/edit-profile': (context) => const EditProfileScreen(),
+        '/shipping-addresses': (context) => const ShippingAddressesScreen(),
+        '/app-settings': (context) => const AppSettingsScreen(),
+        '/help-center': (context) => const HelpCenterScreen(),
       },
     );
   }
@@ -60,7 +70,7 @@ class NavigationExample extends StatefulWidget {
 class _NavigationExampleState extends State<NavigationExample> {
   int currentPageIndex = 0;
 
-  List<Widget> pages = [
+  final List<Widget> pages = const [
     HomeScreen(),
     FeedsScreen(),
     MallScreen(),
@@ -90,54 +100,36 @@ class _NavigationExampleState extends State<NavigationExample> {
     }
   }
 
-  bool dialogSudahMuncul =
-      false; // Variabel untuk melacak apakah dialog sudah muncul
+  bool dialogSudahMuncul = false; // Variabel untuk melacak apakah dialog sudah muncul
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     // Jika dialog sudah muncul, hentikan eksekusi lebih lanjut
     if (dialogSudahMuncul) return;
-    // Tandai bahwa dialog sudah muncul
     dialogSudahMuncul = true;
 
-    //membuat variabel arguments darii rute
-    //arguments mengambil data dari halaman sebelum nya sebagai tipe data map
     final arguments =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    //masukan data ke variabel sesuay key
     final dataDiri = arguments?['data'];
     final sesi = arguments?['sesi'];
     final tanggal = arguments?['tanggal'];
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      //jika data diri anda
       if (dataDiri != null) {
-        /////////////////////////////////munculkan dialog
         showDialog(
           context: context,
-          barrierDismissible:
-              false, // Mencegah dialog tertutup saat area luar diklik (opsional)
+          barrierDismissible: false,
           builder: (context) => Dialog(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(
-                28,
-              ), // Sudut lebih membulat (modern look)
+              borderRadius: BorderRadius.circular(28),
             ),
             elevation: 0,
             backgroundColor: Colors.transparent,
             child: Container(
-              padding: const EdgeInsets.fromLTRB(
-                24,
-                32,
-                24,
-                24,
-              ), // Padding atas lebih longgar
+              padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
               decoration: BoxDecoration(
-                color: Theme.of(
-                  context,
-                ).cardColor, // Menggunakan cardColor agar adaptif terhadap Dark/Light mode
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(28),
                 boxShadow: const [
                   BoxShadow(
@@ -150,7 +142,6 @@ class _NavigationExampleState extends State<NavigationExample> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Icon dengan efek Stack / Lingkaran Ganda yang Estetik
                   Stack(
                     alignment: Alignment.center,
                     children: [
@@ -158,7 +149,7 @@ class _NavigationExampleState extends State<NavigationExample> {
                         height: 80,
                         width: 80,
                         decoration: BoxDecoration(
-                          color: Colors.green.withOpacity(0.1),
+                          color: Colors.green.withValues(alpha: 0.1),
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -179,7 +170,6 @@ class _NavigationExampleState extends State<NavigationExample> {
                   ),
                   const SizedBox(height: 24),
 
-                  // Judul dengan tracking/spacing yang rapi
                   const Text(
                     'Login Berhasil!',
                     style: TextStyle(
@@ -190,7 +180,6 @@ class _NavigationExampleState extends State<NavigationExample> {
                   ),
                   const SizedBox(height: 12),
 
-                  // Teks Deskripsi dengan line height yang nyaman dibaca
                   Text.rich(
                     TextSpan(
                       text: 'Selamat datang ',
@@ -199,7 +188,7 @@ class _NavigationExampleState extends State<NavigationExample> {
                         height: 1.6,
                         color: Theme.of(
                           context,
-                        ).textTheme.bodyMedium?.color?.withOpacity(0.8),
+                        ).textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
                       ),
                       children: [
                         TextSpan(
@@ -232,7 +221,6 @@ class _NavigationExampleState extends State<NavigationExample> {
                   ),
                   const SizedBox(height: 32),
 
-                  // Tombol dengan efek Shadow halus
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -244,7 +232,7 @@ class _NavigationExampleState extends State<NavigationExample> {
                           borderRadius: BorderRadius.circular(16),
                         ),
                         elevation: 4,
-                        shadowColor: Colors.green.withOpacity(0.4),
+                        shadowColor: Colors.green.withValues(alpha: 0.4),
                       ),
                       onPressed: () => Navigator.pop(context),
                       child: const Text(
@@ -268,7 +256,6 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   @override
   Widget build(BuildContext context) {
-    // print(dataDiri);
     return Scaffold(
       body: NotificationListener<ScrollNotification>(
         onNotification: (notification) {
@@ -285,15 +272,11 @@ class _NavigationExampleState extends State<NavigationExample> {
               child: AnimatedSlide(
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeOutCubic,
-                // Muncul: Offset(0, 0)
-                // Hilang: geser ke bawah
                 offset: _showNavigationBar ? Offset.zero : const Offset(0, 1.5),
-
                 child: AnimatedOpacity(
                   duration: const Duration(milliseconds: 250),
                   curve: Curves.easeInOut,
                   opacity: _showNavigationBar ? 1.0 : 0.0,
-
                   child: _navBar(),
                 ),
               ),
@@ -310,19 +293,14 @@ class _NavigationExampleState extends State<NavigationExample> {
       borderRadius: BorderRadius.circular(25),
       clipBehavior: Clip.antiAlias,
       child: NavigationBar(
-        // ketika menu diklik
         onDestinationSelected: (int selectedMenu) {
           setState(() {
-            // ubah urutan menu dan halaman
             currentPageIndex = selectedMenu;
           });
         },
-        indicatorColor: Theme.of(context).colorScheme.primary,
-        // menunjukkan menu mana yang aktif
+        indicatorColor: const Color(0xFFFF6B00),
         selectedIndex: currentPageIndex,
-        // kumpulan menu
         destinations: const <Widget>[
-          // menu-menu di bawah
           NavigationDestination(
             selectedIcon: Icon(Icons.home, color: Colors.white),
             icon: Icon(Icons.home_outlined),
@@ -340,7 +318,7 @@ class _NavigationExampleState extends State<NavigationExample> {
           ),
           NavigationDestination(
             selectedIcon: Icon(Icons.list_alt, color: Colors.white),
-            icon: Badge(label: Text('2'), child: Icon(Icons.list_alt_outlined)),
+            icon: Badge(label: Text('5'), child: Icon(Icons.list_alt_outlined)),
             label: 'Transactions',
           ),
           NavigationDestination(

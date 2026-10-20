@@ -23,17 +23,20 @@ class _RegisterPageState extends State<RegisterPage>
   final _passwordController = TextEditingController();
   final _confirmController = TextEditingController();
 
+  static const Color primaryOrange = Color(0xFFFF6B00);
+  static const Color primaryPurple = Color(0xFF6C5CE7);
+
   @override
   void initState() {
     super.initState();
 
     _fadeController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 900),
+      duration: const Duration(milliseconds: 800),
     );
     _slideController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 900),
     );
 
     _fadeAnimation = CurvedAnimation(
@@ -41,7 +44,7 @@ class _RegisterPageState extends State<RegisterPage>
       curve: Curves.easeIn,
     );
     _logoSlide = Tween<Offset>(
-      begin: const Offset(0, -1),
+      begin: const Offset(0, -0.6),
       end: Offset.zero,
     ).animate(CurvedAnimation(
       parent: _slideController,
@@ -49,7 +52,7 @@ class _RegisterPageState extends State<RegisterPage>
     ));
 
     _formSlide = Tween<Offset>(
-      begin: const Offset(1, 0),
+      begin: const Offset(0.6, 0),
       end: Offset.zero,
     ).animate(CurvedAnimation(
       parent: _slideController,
@@ -57,7 +60,7 @@ class _RegisterPageState extends State<RegisterPage>
     ));
 
     _buttonSlide = Tween<Offset>(
-      begin: const Offset(0, 1),
+      begin: const Offset(0, 0.6),
       end: Offset.zero,
     ).animate(CurvedAnimation(
       parent: _slideController,
@@ -82,15 +85,16 @@ class _RegisterPageState extends State<RegisterPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF9FAFB),
       body: FadeTransition(
         opacity: _fadeAnimation,
         child: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Color(0xFF1A1A2E),
-                Color(0xFF16213E),
-                Color(0xFF0F3460),
+                primaryOrange.withValues(alpha: 0.08),
+                Colors.white,
+                primaryPurple.withValues(alpha: 0.08),
               ],
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
@@ -98,11 +102,11 @@ class _RegisterPageState extends State<RegisterPage>
           ),
           child: SafeArea(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 16),
 
                   // ── Logo & Judul ──
                   SlideTransition(
@@ -113,63 +117,66 @@ class _RegisterPageState extends State<RegisterPage>
                           width: 80,
                           height: 80,
                           decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFF6C63FF), Color(0xFF9B8FFF)],
-                            ),
+                            borderRadius: BorderRadius.circular(22),
                             boxShadow: [
                               BoxShadow(
-                                color: const Color(0xFF6C63FF).withOpacity(0.5),
-                                blurRadius: 24,
-                                spreadRadius: 4,
+                                color: primaryOrange.withValues(alpha: 0.25),
+                                blurRadius: 20,
+                                offset: const Offset(0, 8),
                               ),
                             ],
                           ),
-                          child: const Icon(
-                            Icons.person_add_rounded,
-                            size: 40,
-                            color: Colors.white,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(22),
+                            child: Image.asset(
+                              'assets/images/app_icon.png',
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) => Container(
+                                color: primaryPurple,
+                                child: const Icon(Icons.person_add_rounded, color: Colors.white, size: 36),
+                              ),
+                            ),
                           ),
                         ),
-                        const SizedBox(height: 18),
+                        const SizedBox(height: 16),
                         const Text(
                           'Buat Akun Baru ✨',
                           style: TextStyle(
                             fontSize: 26,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            letterSpacing: 0.5,
+                            fontWeight: FontWeight.w800,
+                            color: Color(0xFF1E1B4B),
+                            letterSpacing: 0.3,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 6),
                         Text(
-                          'Daftar untuk memulai perjalanan',
+                          'Daftar untuk mulai berbelanja di BelanjaMart',
                           style: TextStyle(
                             fontSize: 14,
-                            color: Colors.white.withOpacity(0.6),
+                            color: Colors.grey.shade600,
                           ),
                         ),
                       ],
                     ),
                   ),
 
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 28),
 
                   // ── Form Card ──
                   SlideTransition(
                     position: _formSlide,
                     child: Container(
-                      padding: const EdgeInsets.all(24),
+                      padding: const EdgeInsets.all(22),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.07),
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(24),
                         border: Border.all(
-                          color: Colors.white.withOpacity(0.12),
+                          color: Colors.grey.shade200,
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.3),
-                            blurRadius: 20,
+                            color: Colors.black.withValues(alpha: 0.04),
+                            blurRadius: 18,
                             offset: const Offset(0, 8),
                           ),
                         ],
@@ -180,15 +187,15 @@ class _RegisterPageState extends State<RegisterPage>
                           _buildTextField(
                             controller: _nameController,
                             label: 'Nama Lengkap',
-                            icon: Icons.person_outline,
+                            icon: Icons.person_outline_rounded,
                           ),
                           const SizedBox(height: 16),
 
                           // Email Field
                           _buildTextField(
                             controller: _emailController,
-                            label: 'Email',
-                            icon: Icons.email_outlined,
+                            label: 'Alamat Email',
+                            icon: Icons.alternate_email_rounded,
                             keyboardType: TextInputType.emailAddress,
                           ),
                           const SizedBox(height: 16),
@@ -197,14 +204,14 @@ class _RegisterPageState extends State<RegisterPage>
                           _buildTextField(
                             controller: _passwordController,
                             label: 'Password',
-                            icon: Icons.lock_outline,
+                            icon: Icons.lock_outline_rounded,
                             obscureText: _obscurePassword,
                             suffixIcon: IconButton(
                               icon: Icon(
                                 _obscurePassword
                                     ? Icons.visibility_off_outlined
                                     : Icons.visibility_outlined,
-                                color: Colors.white54,
+                                color: Colors.grey.shade600,
                                 size: 20,
                               ),
                               onPressed: () {
@@ -219,14 +226,14 @@ class _RegisterPageState extends State<RegisterPage>
                           _buildTextField(
                             controller: _confirmController,
                             label: 'Konfirmasi Password',
-                            icon: Icons.lock_reset_outlined,
+                            icon: Icons.lock_reset_rounded,
                             obscureText: _obscureConfirm,
                             suffixIcon: IconButton(
                               icon: Icon(
                                 _obscureConfirm
                                     ? Icons.visibility_off_outlined
                                     : Icons.visibility_outlined,
-                                color: Colors.white54,
+                                color: Colors.grey.shade600,
                                 size: 20,
                               ),
                               onPressed: () {
@@ -247,49 +254,88 @@ class _RegisterPageState extends State<RegisterPage>
                     position: _buttonSlide,
                     child: Column(
                       children: [
-                        SizedBox(
+                        Container(
                           width: double.infinity,
-                          height: 54,
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [Color(0xFF6C63FF), Color(0xFF9B8FFF)],
-                              ),
-                              borderRadius: BorderRadius.circular(16),
-                              boxShadow: [
-                                BoxShadow(
-                                  color:
-                                      const Color(0xFF6C63FF).withOpacity(0.45),
-                                  blurRadius: 16,
-                                  offset: const Offset(0, 6),
-                                ),
-                              ],
+                          height: 52,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [primaryOrange, primaryPurple],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
                             ),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                shadowColor: Colors.transparent,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: primaryOrange.withValues(alpha: 0.35),
+                                blurRadius: 16,
+                                offset: const Offset(0, 6),
                               ),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text(
-                                'Daftar',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  letterSpacing: 0.5,
+                            ],
+                          ),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              shadowColor: Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                            ),
+                            onPressed: () {
+                              if (_nameController.text.isEmpty ||
+                                  _emailController.text.isEmpty ||
+                                  _passwordController.text.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: const Text('Harap lengkapi semua data pendaftaran!'),
+                                    backgroundColor: Colors.red.shade700,
+                                    behavior: SnackBarBehavior.floating,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                );
+                                return;
+                              }
+
+                              if (_passwordController.text != _confirmController.text) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: const Text('Konfirmasi password tidak cocok!'),
+                                    backgroundColor: Colors.red.shade700,
+                                    behavior: SnackBarBehavior.floating,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                );
+                                return;
+                              }
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: const Text('Pendaftaran berhasil! Silakan masuk.'),
+                                  backgroundColor: Colors.green.shade700,
+                                  behavior: SnackBarBehavior.floating,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
                                 ),
+                              );
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                              'Daftar Sekarang',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                letterSpacing: 0.5,
                               ),
                             ),
                           ),
                         ),
 
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 22),
 
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -297,7 +343,7 @@ class _RegisterPageState extends State<RegisterPage>
                             Text(
                               'Sudah punya akun? ',
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.6),
+                                color: Colors.grey.shade600,
                                 fontSize: 14,
                               ),
                             ),
@@ -306,9 +352,9 @@ class _RegisterPageState extends State<RegisterPage>
                                 Navigator.pop(context);
                               },
                               child: const Text(
-                                'Masuk',
+                                'Masuk di sini',
                                 style: TextStyle(
-                                  color: Color(0xFF9B8FFF),
+                                  color: primaryPurple,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
                                 ),
@@ -342,22 +388,22 @@ class _RegisterPageState extends State<RegisterPage>
       controller: controller,
       obscureText: obscureText,
       keyboardType: keyboardType,
-      style: const TextStyle(color: Colors.white),
+      style: const TextStyle(color: Color(0xFF1E1B4B), fontSize: 14),
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 14),
-        prefixIcon: Icon(icon, color: const Color(0xFF6C63FF), size: 20),
+        labelStyle: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+        prefixIcon: Icon(icon, color: primaryPurple, size: 20),
         suffixIcon: suffixIcon,
         filled: true,
-        fillColor: Colors.white.withOpacity(0.05),
+        fillColor: const Color(0xFFF9FAFB),
         contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: Colors.white.withOpacity(0.15)),
+          borderSide: BorderSide(color: Colors.grey.shade300),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: Color(0xFF6C63FF), width: 1.5),
+          borderSide: const BorderSide(color: primaryOrange, width: 1.5),
         ),
       ),
     );

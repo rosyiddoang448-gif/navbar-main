@@ -197,7 +197,7 @@ class _ProductGridState extends State<ProductGrid> {
 
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 12,
             offset: const Offset(0, 5),
           ),
@@ -283,7 +283,7 @@ class _ProductGridState extends State<ProductGrid> {
 
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.08),
+                          color: Colors.black.withValues(alpha: 0.08),
                           blurRadius: 8,
                         ),
                       ],
